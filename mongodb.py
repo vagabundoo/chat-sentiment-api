@@ -31,10 +31,10 @@ def createChat_toDB(user_ids):
     chat = conversations_coll.insert_one({"participants":list(user_ids)})
     return chat.inserted_id
 
-def addUsertoChat_toDB():
-    pass
+# def addUsertoChat_toDB(user_id, chat_id):
+#     update = conversations_coll.update({"_id": ObjectId(f"{chat_id}"})}, {"$addToSet":{{ObjectId(f"{chat_id}") : ObjectId(f"{chat_id}"}}))
 
-
+print(conversations_coll.find().)
 
 
 #addUser_toDB()

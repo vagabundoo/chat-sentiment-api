@@ -10,15 +10,6 @@ db = client.get_database()
 users_coll = db["users"]
 conversations_coll = db["conversations"]
 
-# (GET) /user/create/<username>
-# Purpose: Create a user and save into DB
-# Params: username the user name
-# Returns: user_id
-
-users_coll.remove({})
-# id_number = 1a
-
-
 @app.route('/user/create/<username>')
 def addUser(username):
     """
@@ -30,8 +21,9 @@ def addUser(username):
     """
     user_id = random.choice(range(1000))
     user = {"username": username}
-    users_coll.insert_one(user)
-    return dumps(users_coll.find_one({"username":username},{"_id":1})) 
+    result = users_coll.insert_one(user)
+    return str(f'Created user: {username}, with id {result.inserted_id}')
+    #return dumps(users_coll.find_one({"username":username},{"_id":1})) 
     #return f'Created user {username} with user_id: {user_id}'
     # Could consider adding a way to check that the user_id has not been used before.
     # user_id)

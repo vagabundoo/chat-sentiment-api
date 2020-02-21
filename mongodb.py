@@ -31,11 +31,18 @@ def createChat_toDB(user_ids):
     chat = conversations_coll.insert_one({"participants":list(user_ids)})
     return chat.inserted_id
 
-# def addUsertoChat_toDB(user_id, chat_id):
-#     update = conversations_coll.update({"_id": ObjectId(f"{chat_id}"})}, {"$addToSet":{{ObjectId(f"{chat_id}") : ObjectId(f"{chat_id}"}}))
+def addUsertoChat_toDB(user_id, chat_id):
+    #chatid = ObjectId(f'{chat_id}')
+    
+    update = conversations_coll.update({"_id": ObjectId(chat_id)}, {"$addToSet":{"participants" : ObjectId(user_id)}})
+    return update
 
-print(conversations_coll.find().)
+print(addUsertoChat_toDB("5e4ed15d9aecb4edb7b45298","5e4fc16249c4acba777e6ae8"))
 
+#print(ObjectId("5e4ed15d9aecb4edb7b45298"))
+
+print(list(users_coll.find(projection={"_id":1}, limit=5)))
+print(list(conversations_coll.find(projection={"_id":1}, limit=5)))
 
 #addUser_toDB()
 

@@ -22,8 +22,6 @@ def addUser(username):
         string with username and user_id
     """
     user_id = mdb.addUser_toDB(username)
-    #user = {"username": username}
-    #result = users_coll.insert_one(user)
     resp = str(f'Created user: {username}, with id {user_id}')
     print(resp)
     return resp
@@ -53,11 +51,13 @@ def inputUserForm():
 @app.route('/chat/create/', methods=['GET', 'POST'])
 def createChat():
     if request.method == 'GET':
-        users = request.args.get('list_users')
+        users = str(request.args.get('list_users'))
         participants = users.split(",")
-        result = conversations_coll.insert_one({"participants":participants})
-        resp = f'Created chat with users <b>{", ".join(participants)}</b>, with id {result.inserted_id}'
+        chat_id = mdb.createChat_toDB(participants)
+        resp = f'Created chat with users <b>{", ".join(participants)}</b>, with id {chat_id}'
+        print(resp)
         return resp 
+    request.post()
 
 @app.route('/chat/<chat_id>/adduser')
 def addUsertoChat(user_id):

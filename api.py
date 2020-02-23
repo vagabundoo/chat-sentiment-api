@@ -76,9 +76,9 @@ def addMessagetoChat(chat_id):
     print(data)
     user_id = data["user_id"]
     print(user_id)
-    #if not mdb.check_if_user_inChat(chat_id, user_id):
-        #print(chat_id, user_id)
-        #raise NameError("User not in present in chat")
+    if not mdb.check_if_user_inChat(chat_id, user_id):
+        print(chat_id, user_id)
+        raise NameError("User not in present in chat")
     if not mdb.check_if_user_inDB(user_id):
         raise NameError("User not in present in DB")
     text = data["text"]

@@ -2,6 +2,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
 from bson.json_util import dumps
+from random import choice
 
 client = MongoClient("mongodb://localhost/chat_sentiments")
 db = client.get_database()
@@ -33,11 +34,12 @@ def addUserToChat_toDB(user_id, chat_id):
 
 def addMessageToChat_toDB(chat_id, user_id, text):
     message = {
+        "message_id": choice(range(100000000)),
         "user_id":user_id,
         "text":text
     } # Consider adding a timestamp to the message as well.
     update = conversations_coll.update_one({"_id": ObjectId(chat_id)}, {"$addToSet":{"messages" : message}})
-    return update
+    return message["message_id"]
 
 # Validation functions
 
@@ -50,7 +52,7 @@ def check_if_user_inDB(user_id):
         return False
 
 def check_if_user_inChat(chat_id, user_id):
-    if type(conversations_coll.find_one({"$and": [{"_id":ObjectId(chat_id)},{"participants":ObjectId(user_id)}]})) == dict:
+    if type(conversations_coll.find_one({"$and": [{"_id":ObjectId(chat_id)},{"participants":user_id}]})) == dict:
         return True
     return False
 

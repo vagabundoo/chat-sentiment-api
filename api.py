@@ -24,7 +24,7 @@ def addUser(username):
     user_id = mdb.addUser_toDB(username)
     resp = str(f'Created user: {username}, with id {user_id}')
     print(resp)
-    return resp
+    return str(user_id)
 
 @app.route('/user/input', methods=['GET', 'POST']) 
 def inputUserForm():
@@ -60,12 +60,22 @@ def createChat():
     #request.post()
 
 @app.route('/chat/<chat_id>/adduser')
-def addUsertoChat(user_id):
-    request.args.get
-    pass
+def addUsertoChat(chat_id):
+    user_id = request.args.get('user_id')
+    update = addUserToChat_toDB(user_id, chat_id)
+    return chat_id
 
 
-#@app.route('/chat/<chat_id>/addmessage')
-#def addMessagetoChat(chat_id):
+@app.route('/chat/<chat_id>/addmessage', methods=['POST'])
+def addMessagetoChat(chat_id):
+    user_id = request.args.get('user_id')
+    if not mdb.check_if_user_inChat(chat_id, user_id) or not check_if_user_inDB(user_id):
+        raise NameError("User not in present in chat")
+    data = request.get_json()
+    user_id = data["user_id"]
+    text = data["text"]
+    return addMessageToChat_toDB(chat_id, user_id, text)
 
-app.run("0.0.0.0", 5002, debug=True)
+
+
+app.run("0.0.0.0", 5001, debug=True)

@@ -25,6 +25,11 @@ def check_if_user_inDB(user_id):
     except (InvalidId, NameError):
         return False
 
+def check_if_user_inChat(chat_id, user_id):
+    if type(conversations_coll.find_one({"$and": [{"_id":ObjectId(chat_id)},{"participants":user_id}]})) == dict:
+        return True
+    return False
+
 def createChat_toDB(user_ids):
     for e in user_ids:
         if not check_if_user_inDB(e):
@@ -33,6 +38,8 @@ def createChat_toDB(user_ids):
     return chat.inserted_id
 
 def addUserToChat_toDB(user_id, chat_id):
+    if not check_if_user_inDB:
+        raise NameError("User_ID not in database")
     update = conversations_coll.update_one({"_id": ObjectId(chat_id)}, {"$addToSet":{"participants" : ObjectId(user_id)}})
     return update
 
@@ -42,8 +49,10 @@ def addMessageToChat_toDB(chat_id, user_id, text):
         "text":text
     } # Consider adding a timestamp to the message as well.
     update = conversations_coll.update_one({"_id": ObjectId(chat_id)}, {"$addToSet":{"messages" : message}})
+    return update
 
-def getMessagesChat(chat_id):
+#def getAllMessagesChat(chat_id):
 
 
-#createChat_toDB(['5e4ed15d9aecb4edb7b45298', '5e4fa66040f41f4a46fdcdea'])
+
+

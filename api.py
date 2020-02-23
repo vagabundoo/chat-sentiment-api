@@ -57,10 +57,11 @@ def createChat():
         resp = f'Created chat with users <b>{", ".join(participants)}</b>, with id {chat_id}'
         print(resp)
         return resp 
-    request.post()
+    #request.post()
 
 @app.route('/chat/<chat_id>/adduser')
 def addUsertoChat(user_id):
+    request.args.get
     pass
 
 

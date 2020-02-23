@@ -2,6 +2,7 @@ from flask import Flask, request
 from pymongo import MongoClient
 from bson.json_util import dumps
 import mongodb as mdb
+from json import dumps
 
 app = Flask(__name__)
 
@@ -46,36 +47,41 @@ def inputUserForm():
                   <input type="submit" value="Submit"><br>
               </form>'''
 
-# Chats
+# Chats 
 
 @app.route('/chat/create/', methods=['GET', 'POST'])
 def createChat():
     if request.method == 'GET':
         users = str(request.args.get('list_users'))
+        print(users)
         participants = users.split(",")
+        print(participants)
         chat_id = mdb.createChat_toDB(participants)
         resp = f'Created chat with users <b>{", ".join(participants)}</b>, with id {chat_id}'
         print(resp)
-        return resp 
+        return str(chat_id)
     #request.post()
 
 @app.route('/chat/<chat_id>/adduser')
 def addUsertoChat(chat_id):
     user_id = request.args.get('user_id')
-    update = addUserToChat_toDB(user_id, chat_id)
+    update = mdb.addUserToChat_toDB(user_id, chat_id)
     return chat_id
 
 
 @app.route('/chat/<chat_id>/addmessage', methods=['POST'])
 def addMessagetoChat(chat_id):
-    user_id = request.args.get('user_id')
-    if not mdb.check_if_user_inChat(chat_id, user_id) or not check_if_user_inDB(user_id):
-        raise NameError("User not in present in chat")
+    #user_id = request.args.get('user_id')
     data = request.get_json()
+    print(data)
     user_id = data["user_id"]
+    print(user_id)
+    #if not mdb.check_if_user_inChat(chat_id, user_id):
+        #print(chat_id, user_id)
+        #raise NameError("User not in present in chat")
+    if not mdb.check_if_user_inDB(user_id):
+        raise NameError("User not in present in DB")
     text = data["text"]
-    return addMessageToChat_toDB(chat_id, user_id, text)
-
-
+    return str(mdb.addMessageToChat_toDB(chat_id, user_id, text))
 
 app.run("0.0.0.0", 5001, debug=True)

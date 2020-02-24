@@ -50,18 +50,16 @@ def inputUserForm():
 
 # Chats 
 
-@app.route('/chat/create/', methods=['GET', 'POST'])
+@app.route('/chat/create/', methods=['GET'])
 def createChat():
-    if request.method == 'GET':
-        users = str(request.args.get('list_users'))
-        print(users)
-        participants = users.split(",")
-        print(participants)
-        chat_id = mdb.createChat_toDB(participants)
-        resp = f'Created chat with users <b>{", ".join(participants)}</b>, with id {chat_id}'
-        print(resp)
-        return str(chat_id)
-    #request.post()
+    users = str(request.args.get('list_users'))
+    print(users)
+    participants = users.split(",")
+    print(participants)
+    chat_id = mdb.createChat_toDB(participants)
+    resp = f'Created chat with users <b>{", ".join(participants)}</b>, with id {chat_id}'
+    print(resp)
+    return str(chat_id)
 
 @app.route('/chat/<chat_id>/adduser')
 def addUsertoChat(chat_id):

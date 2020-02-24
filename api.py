@@ -84,4 +84,10 @@ def addMessagetoChat(chat_id):
     text = data["text"]
     return str(mdb.addMessageToChat_toDB(chat_id, user_id, text))
 
+# Retrieval functions
+
+@app.route('/chat/<chat_id>/list')
+def getAllMessagesChat(chat_id):
+    return mdb.getAllMessagesChat(chat_id)
+
 app.run("0.0.0.0", 5001, debug=True)

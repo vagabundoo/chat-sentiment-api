@@ -56,8 +56,9 @@ def check_if_user_inChat(chat_id, user_id):
         return True
     return False
 
-#def getAllMessagesChat(chat_id):
-
+def getAllMessagesChat(chat_id):
+    result = conversations_coll.find_one({"_id":ObjectId(chat_id)}, projection={"_id":0,"messages":1})
+    return dumps(result)
 
 
 

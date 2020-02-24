@@ -1,8 +1,9 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from pymongo import MongoClient
 from bson.json_util import dumps
 import mongodb as mdb
-from json import dumps
+from json import dumps, loads
+import sentiment
 
 app = Flask(__name__)
 
@@ -89,5 +90,19 @@ def addMessagetoChat(chat_id):
 @app.route('/chat/<chat_id>/list')
 def getAllMessagesChat(chat_id):
     return mdb.getAllMessagesChat(chat_id)
+
+# Sentiment analysis
+
+@app.route('/chat/<chat_id>/sentiment')
+def getListSentiment(chat_id):
+    allmessages = getAllMessagesChat(chat_id)
+    print(allmessages)
+    msges_listofdicts = loads(allmessages)['messages']
+    print(msges_listofdicts)
+    list_messages = [e['text'] for e in msges_listofdicts]
+    print(list_messages)
+    sentiments = [sentiment.getSentimentMessage(e) for e in list_messages]
+    print(sentiments)
+    return jsonify(sentiments)
 
 app.run("0.0.0.0", 5001, debug=True)

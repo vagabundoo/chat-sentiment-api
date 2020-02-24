@@ -2,6 +2,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
 from bson.json_util import dumps
+from random import choice
 
 client = MongoClient("mongodb://localhost/chat_sentiments")
 db = client.get_database()
@@ -18,13 +19,6 @@ def addUser_toDB(username):
 
 # Chat functions
 
-def check_if_user_inDB(user_id):
-    try:
-        users_coll.find_one({"_id": ObjectId(f"{user_id}")})
-        return True
-    except (InvalidId, NameError):
-        return False
-
 def createChat_toDB(user_ids):
     for e in user_ids:
         if not check_if_user_inDB(e):
@@ -33,17 +27,38 @@ def createChat_toDB(user_ids):
     return chat.inserted_id
 
 def addUserToChat_toDB(user_id, chat_id):
+    if not check_if_user_inDB:
+        raise NameError("User_ID not in database")
     update = conversations_coll.update_one({"_id": ObjectId(chat_id)}, {"$addToSet":{"participants" : ObjectId(user_id)}})
     return update
 
 def addMessageToChat_toDB(chat_id, user_id, text):
     message = {
+        "message_id": choice(range(100000000)),
         "user_id":user_id,
         "text":text
     } # Consider adding a timestamp to the message as well.
     update = conversations_coll.update_one({"_id": ObjectId(chat_id)}, {"$addToSet":{"messages" : message}})
+    return message["message_id"]
 
-def getMessagesChat(chat_id):
+# Validation functions
+
+def check_if_user_inDB(user_id):
+    try:
+        object = users_coll.find_one({"_id": ObjectId(user_id)})
+        #print(object)
+        return True
+    except (InvalidId, NameError):
+        return False
+
+def check_if_user_inChat(chat_id, user_id):
+    if type(conversations_coll.find_one({"$and": [{"_id":ObjectId(chat_id)},{"participants":user_id}]})) == dict:
+        return True
+    return False
+
+def getAllMessagesChat(chat_id):
+    result = conversations_coll.find_one({"_id":ObjectId(chat_id)}, projection={"_id":0,"messages":1})
+    return dumps(result)
 
 
-#createChat_toDB(['5e4ed15d9aecb4edb7b45298', '5e4fa66040f41f4a46fdcdea'])
+

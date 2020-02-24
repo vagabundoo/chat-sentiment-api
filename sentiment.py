@@ -3,6 +3,7 @@ from bson.objectid import ObjectId
 import nltk
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from json import dumps
+nltk.download('vader_lexicon')
 
 client = MongoClient("mongodb://localhost/chat_sentiments")
 db = client.get_database()

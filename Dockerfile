@@ -4,6 +4,8 @@ COPY . /chat-sentiment-api
 
 WORKDIR /chat-sentiment-api
 
-RUN pip install -r requirements.txt
+#RUN python3 -m nltk.downloader punkt
+
+RUN pip3 install -r requirements.txt
 
 CMD ["python3","api.py"]

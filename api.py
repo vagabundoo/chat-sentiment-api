@@ -67,7 +67,6 @@ def addUsertoChat(chat_id):
     update = mdb.addUserToChat_toDB(user_id, chat_id)
     return chat_id
 
-
 @app.route('/chat/<chat_id>/addmessage', methods=['POST'])
 def addMessagetoChat(chat_id):
     #user_id = request.args.get('user_id')

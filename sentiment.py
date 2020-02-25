@@ -1,3 +1,4 @@
+from config import dbURL
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 import nltk
@@ -5,7 +6,7 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from json import dumps
 nltk.download('vader_lexicon')
 
-client = MongoClient("mongodb://localhost/chat_sentiments")
+client = MongoClient(dbURL)
 db = client.get_database()
 users_coll = db["users"]
 conversations_coll = db["conversations"]

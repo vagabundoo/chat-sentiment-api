@@ -1,10 +1,11 @@
+from config import dbURL
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
 from bson.json_util import dumps
 from random import choice
 
-client = MongoClient("mongodb://localhost/chat_sentiments")
+client = MongoClient(dbURL)
 db = client.get_database()
 users_coll = db["users"]
 conversations_coll = db["conversations"]

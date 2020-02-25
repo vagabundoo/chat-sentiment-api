@@ -1,3 +1,4 @@
+from config import dbURL
 from flask import Flask, request, jsonify
 from pymongo import MongoClient
 from bson.json_util import dumps
@@ -5,9 +6,10 @@ import mongodb as mdb
 from json import dumps, loads
 import sentiment
 
+
 app = Flask(__name__)
 
-client = MongoClient("mongodb://localhost/chat_sentiments")
+client = MongoClient(dbURL)
 db = client.get_database()
 users_coll = db["users"]
 conversations_coll = db["conversations"]

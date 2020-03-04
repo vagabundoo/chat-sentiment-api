@@ -1,7 +1,9 @@
 # Creating an API from scratch - to analyze chat sentiments
 
 This was a project to create an API from scratch. The API links to a Mongo Database, and stores the input from the GET and POST requests.  
-You can make requests to add users and their conversations/chat logs to the DB. The API has the following functions:
+You can make requests to add users and their conversations/chat logs to the DB, as well as ask for sentiment analysis for the messages currently in the chat.
+
+The API has the following functions:
 
 ### 1. User endpoints
 
